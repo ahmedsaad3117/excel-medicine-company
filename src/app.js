@@ -2,36 +2,80 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 const reader = require("node-xlsx");
+const path = require("path");
+const multer = require("multer");
 
 const app = express();
 const port = 3000;
 
 app.use(bodyParser.text());
 
-app.get("/transform", (req, res) => {
-  //   const input = req.body;
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
 
-  let data = [];
+app.use(bodyParser.text());
 
-  var obj = reader.parse(fs.readFileSync("80813576.xlsx"));
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-  obj[0].data.forEach((res) => {
-    data.push(mainHandler(res[0]));
-  });
-
-  const sheet = [["Existing Data"], [""], ["New Data"]];
-  data.forEach((value) => {
-    sheet.push(["", value]); // Add an empty cell in the first column for each row
-  });
-
-  // Create a buffer for the Excel file
-  const buffer = reader.build([{ name: "Sheet 1", data: sheet }]);
-  fs.writeFileSync("80813576.xlsx", buffer);
-
-  // Write the buffer to a file
-
-  res.send("send");
+app.get("/", (req, res) => {
+  res.render("index");
 });
+
+app.post("/transform", upload.single("excelFile"), (req, res) => {
+  try {
+    if (!req.file) {
+      res.status(400).send("No file uploaded");
+      return;
+    }
+
+    let data = [];
+
+    const obj = reader.parse(req.file.buffer);
+
+    obj[0].data.forEach((row) => {
+      data.push(mainHandler(row[0]));
+    });
+
+    const sheet = [["Existing Data"], [""], ["New Data"]];
+    data.forEach((value) => {
+      sheet.push(["", value]);
+    });
+
+    const buffer = reader.build([{ name: "Sheet 1", data: sheet }]);
+    fs.writeFileSync("output.xlsx", buffer);
+
+    res.download("output.xlsx", "output.xlsx");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+// app.get("/transform", (req, res) => {
+//   //   const input = req.body;
+
+//   let data = [];
+
+//   var obj = reader.parse(fs.readFileSync("80813576.xlsx"));
+
+//   obj[0].data.forEach((res) => {
+//     data.push(mainHandler(res[0]));
+//   });
+
+//   const sheet = [["Existing Data"], [""], ["New Data"]];
+//   data.forEach((value) => {
+//     sheet.push(["", value]); // Add an empty cell in the first column for each row
+//   });
+
+//   // Create a buffer for the Excel file
+//   const buffer = reader.build([{ name: "Sheet 1", data: sheet }]);
+//   fs.writeFileSync("80813576.xlsx", buffer);
+
+//   // Write the buffer to a file
+
+//   res.send("send");
+// });
 
 function dateHandler(inputDate) {
   // Extract day, month, and year components
