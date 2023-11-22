@@ -46,12 +46,14 @@ app.post("/transform", upload.single("excelFile"), (req, res) => {
     const obj = reader.parse(req.file.buffer);
 
     obj[0].data.forEach((row) => {
+      if (!row[0]) return "";
+      console.log(row);
       data.push(mainHandler(row[0]));
     });
 
-    const sheet = [["Existing Data"], [""], ["New Data"]];
+    const sheet = [];
     data.forEach((value) => {
-      sheet.push(["", value]);
+      sheet.push([value]);
     });
 
     const buffer = reader.build([{ name: "Sheet 1", data: sheet }]);
@@ -112,8 +114,7 @@ function dateHandler(inputDate) {
 function mainHandler(input) {
   try {
     if (!input) {
-      res.status(400).send("Invalid input");
-      return;
+      throw new Error('Invalid input')
     }
     const regex01 = /01(\d{14})/;
     const regex17WithDate = /17(\d{2}[01]\d[0-3]\d)/;
