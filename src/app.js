@@ -4,16 +4,29 @@ const fs = require("fs");
 const reader = require("node-xlsx");
 const path = require("path");
 const multer = require("multer");
-
 const app = express();
 const port = 3002;
 
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+
+  // Additional error handling or logging can be performed here
+
+  // Optionally, update fail times or perform other actions
+});
+
 app.use(bodyParser.text());
+
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+
 app.use(bodyParser.text());
+
+const dataFilePath = 'upload_count.txt';
+uploadData = JSON.parse(fs.readFileSync(dataFilePath, 'utf8')) || {};
+let { uploadCount = 0, failTimes = 0 } = uploadData;
 
 const storage = multer.memoryStorage();
 const upload = multer({
@@ -26,6 +39,8 @@ const upload = multer({
       cb(null, true);
     } else {
       cb(new Error('Invalid file type. Only Excel files are allowed.'));
+      failTimes++
+      fs.writeFileSync(dataFilePath, JSON.stringify({ uploadCount, failTimes }));
     }
   },
 });
@@ -60,8 +75,14 @@ app.post("/transform", upload.single("excelFile"), (req, res) => {
     fs.writeFileSync("output.xlsx", buffer);
 
     res.download("output.xlsx", "output.xlsx");
+    uploadCount++; // Increment the upload count
+
+    fs.writeFileSync(dataFilePath, JSON.stringify({ uploadCount, failTimes }));
+
   } catch (error) {
     console.error(error);
+    failTimes++
+    fs.writeFileSync(dataFilePath, JSON.stringify({ uploadCount, failTimes }));
     res.status(500).send("Internal Server Error");
   }
 });
@@ -154,9 +175,12 @@ function mainHandler(input) {
 
     return output;
   } catch (err) {
+    failTimes++
+    fs.writeFileSync(dataFilePath, JSON.stringify({ uploadCount, failTimes }));
     console.log(err);
   }
 }
+
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
