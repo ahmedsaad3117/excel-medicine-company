@@ -1,29 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Excel Transformer</title>
     <style>
-        /* Your existing styles */
+      /* Your existing styles */
 
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            /* Adjusted for vertical stacking */
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            /* background-color: rgba(14, 233, 244, 0.7); */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        /* Adjusted for vertical stacking */
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        /* background-color: rgba(14, 233, 244, 0.7); */
+      }
 
-        }
-
-        /* 
+      /* 
         body::before {
             content: '';
             position: absolute;
@@ -33,100 +31,104 @@
             height: 100%;
             background-color: rgba(14, 233, 244, 0.7);
             /* Adjust opacity and color */
-        /* } */
+      /* } */
 
-        */ h1 {
-            text-align: center;
-            color: #333;
-        }
+      */ h1 {
+        text-align: center;
+        color: #333;
+      }
 
-        h2 {
-            text-align: center;
-            color: #3498db;
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
+      h2 {
+        text-align: center;
+        color: #3498db;
+        font-size: 3em;
+        margin-bottom: 20px;
+      }
 
-        form {
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-            /* Added spacing between form and support link */
-        }
+      form {
+        background-color: #fff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        /* Added spacing between form and support link */
+      }
 
-        input[type="file"] {
-            margin-bottom: 10px;
-        }
+      input[type="file"] {
+        margin-bottom: 10px;
+      }
 
-        button {
-            background-color: #4caf50;
-            color: #fff;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+      button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+      }
 
-        button:hover {
-            background-color: #45a049;
-        }
+      button:hover {
+        background-color: #45a049;
+      }
 
-        /* New styles for the support link */
+      /* New styles for the support link */
 
-        .support-link {
-            text-align: center;
-        }
+      .support-link {
+        text-align: center;
+      }
 
-        .support-box {
-            background-color: #3498db;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-        }
+      .support-box {
+        background-color: #3498db;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+      }
 
-        .support-link p {
-            margin: 0;
-            color: #fff;
-            font-size: 16px;
-        }
+      .support-link p {
+        margin: 0;
+        color: #fff;
+        font-size: 16px;
+      }
 
-        .support-link a {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #fff;
-            color: #3498db;
-            text-decoration: none;
-            border-radius: 4px;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
+      .support-link a {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 10px 20px;
+        background-color: #fff;
+        color: #3498db;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+      }
 
-        .support-link a:hover {
-            background-color: #2980b9;
-            color: #fff;
-        }
+      .support-link a:hover {
+        background-color: #2980b9;
+        color: #fff;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <h2>محول رصد</h2>
     <h1>في لحظات احصل على ملفك صالح للرفع على هيئة رصد مباشراً</h1>
     <form action="/transform" method="post" enctype="multipart/form-data">
-        <input type="file" name="excelFile" accept=".xlsx">
-        <button type="submit">Transform</button>
+      <input type="file" name="excelFile" accept=".xlsx" />
+      <button type="submit">Transform</button>
     </form>
 
     <!-- Support link -->
     <div class="support-link">
-        <div class="support-box">
-            <p>هل يساعدك محول رصد ! ساعدنا في تكاليف ابقاء محول رصد مفتوحا للابد بالمجان واشتر لنا كوب قهوة </p>
-            <a href="https://www.buymeacoffee.com/ahmedsaaad" target="_blank">اشترِ لي كوب قهوة</a>
-        </div>
+      <div class="support-box">
+        <p>
+          هل يساعدك محول رصد ! ساعدنا في تكاليف ابقاء محول رصد مفتوحا للابد
+          بالمجان
+        </p>
+        <a href="https://www.buymeacoffee.com/ahmedsaaad" target="_blank"
+          >اشترِ لي كوب قهوة</a
+        >
+      </div>
     </div>
-</body>
-
+  </body>
 </html>

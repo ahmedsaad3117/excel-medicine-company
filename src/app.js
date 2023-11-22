@@ -16,7 +16,19 @@ app.set("views", path.join(__dirname, "views"));
 app.use(bodyParser.text());
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 4 * 1024 * 1024 }, // 4 megabytes limit
+  fileFilter: (req, file, cb) => {
+    // Check if the file has a valid Excel extension
+    const allowedFileTypes = ['application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel'];
+    if (allowedFileTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only Excel files are allowed.'));
+    }
+  },
+});
 
 app.get("/", (req, res) => {
   res.render("index");
